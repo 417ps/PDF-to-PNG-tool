@@ -1,8 +1,15 @@
 // Echo PDF to PNG Converter JavaScript
 class PDFToPNGConverter {
     constructor() {
-        this.pdfjsLib = window['pdfjs-dist/build/pdf'];
-        this.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        // Access PDF.js library correctly
+        this.pdfjsLib = window.pdfjsLib || window['pdfjs-dist/build/pdf'];
+        
+        // Set worker source
+        if (this.pdfjsLib) {
+            this.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        } else {
+            console.error('PDF.js library not loaded properly');
+        }
         
         this.uploadSection = document.getElementById('uploadArea');
         this.pdfInput = document.getElementById('pdfInput');
@@ -63,8 +70,17 @@ class PDFToPNGConverter {
         if (files.length === 0) return;
         
         const file = files[0];
-        if (file.type !== 'application/pdf') {
+        console.log('File selected:', file.name, file.type, file.size);
+        
+        // Check file type
+        if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
             this.showError('Please select a valid PDF file.');
+            return;
+        }
+        
+        // Check PDF.js library
+        if (!this.pdfjsLib) {
+            this.showError('PDF processing library not loaded. Please refresh the page and try again.');
             return;
         }
         
@@ -74,11 +90,24 @@ class PDFToPNGConverter {
     
     async convertPDFToPNG(file) {
         try {
+            console.log('Starting PDF conversion...');
             this.showProcessingSection();
             
+            // Read file as array buffer
+            console.log('Reading file...');
             const arrayBuffer = await file.arrayBuffer();
-            const pdf = await this.pdfjsLib.getDocument(arrayBuffer).promise;
+            console.log('File read successfully, size:', arrayBuffer.byteLength);
+            
+            // Load PDF document
+            console.log('Loading PDF document...');
+            const pdf = await this.pdfjsLib.getDocument({
+                data: arrayBuffer,
+                cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+                cMapPacked: true
+            }).promise;
+            
             const numPages = pdf.numPages;
+            console.log('PDF loaded successfully. Pages:', numPages);
             
             this.convertedImages = [];
             
@@ -123,7 +152,25 @@ class PDFToPNGConverter {
             
         } catch (error) {
             console.error('Error converting PDF:', error);
-            this.showError('Error converting PDF. Please try again with a different file.');
+            
+            // Reset UI to upload state
+            document.querySelector('.upload-section').style.display = 'block';
+            this.processingSection.style.display = 'none';
+            this.resultsSection.style.display = 'none';
+            
+            // Show specific error message
+            let errorMessage = 'Error converting PDF. ';
+            if (error.message.includes('Invalid PDF')) {
+                errorMessage += 'The file appears to be corrupted or not a valid PDF.';
+            } else if (error.message.includes('password')) {
+                errorMessage += 'Password-protected PDFs are not supported.';
+            } else if (error.name === 'NetworkError') {
+                errorMessage += 'Network error loading PDF processing library.';
+            } else {
+                errorMessage += 'Please try again with a different file.';
+            }
+            
+            this.showError(errorMessage);
         }
     }
     
@@ -175,7 +222,12 @@ class PDFToPNGConverter {
         if (this.convertedImages.length === 0) return;
         
         // For multiple files, we'll create a zip file
-        const { default: JSZip } = await import('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+        if (typeof JSZip === 'undefined') {
+            console.error('JSZip library not loaded');
+            this.showError('Unable to create ZIP file. Please try downloading images individually.');
+            return;
+        }
+        
         const zip = new JSZip();
         
         // Add each image to the zip
