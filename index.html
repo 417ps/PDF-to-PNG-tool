@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echo PDF to PNG Converter</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <div class="echo-logo">echo</div>
+                <span class="tagline">PDF to PNG Converter</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="upload-section">
+                <div class="upload-card">
+                    <div class="upload-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14,2 14,8 20,8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10,9 9,9 8,9"></polyline>
+                        </svg>
+                    </div>
+                    <h2>Convert PDF to PNG</h2>
+                    <p>Upload your PDF file and get high-quality PNG images for each page</p>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <input type="file" id="pdfInput" accept=".pdf" multiple>
+                        <div class="upload-content">
+                            <div class="upload-icon-small">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7,10 12,15 17,10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                            </div>
+                            <span class="upload-text">Drop PDF files here or click to browse</span>
+                            <span class="upload-hint">Supports multiple PDF files</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="processing-section" id="processingSection" style="display: none;">
+                <div class="processing-card">
+                    <div class="loading-spinner"></div>
+                    <h3>Processing your PDF...</h3>
+                    <p>Converting pages to PNG images</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">0%</span>
+                </div>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-card">
+                    <h3>Conversion Complete!</h3>
+                    <p>Your PNG images are ready for download</p>
+                    <div class="results-grid" id="resultsGrid"></div>
+                    <div class="download-actions">
+                        <button class="btn btn-primary" id="downloadAllBtn">Download All PNG Files</button>
+                        <button class="btn btn-secondary" id="convertAnotherBtn">Convert Another PDF</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Echo PDF Converter. Built with modern web technologies.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,402 @@
+/* Echo PDF to PNG Converter Styles */
+:root {
+    --echo-primary: #2563eb;
+    --echo-primary-dark: #1d4ed8;
+    --echo-secondary: #64748b;
+    --echo-success: #10b981;
+    --echo-warning: #f59e0b;
+    --echo-error: #ef4444;
+    --echo-background: #f8fafc;
+    --echo-surface: #ffffff;
+    --echo-border: #e2e8f0;
+    --echo-text-primary: #1e293b;
+    --echo-text-secondary: #64748b;
+    --echo-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --echo-shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --echo-radius: 12px;
+    --echo-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--echo-font-family);
+    background: linear-gradient(135deg, var(--echo-background) 0%, #e2e8f0 100%);
+    color: var(--echo-text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styles */
+.header {
+    padding: 32px 0;
+    text-align: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.echo-logo {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--echo-primary);
+    text-transform: lowercase;
+    letter-spacing: -0.02em;
+}
+
+.tagline {
+    font-size: 1.125rem;
+    color: var(--echo-text-secondary);
+    font-weight: 500;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 0;
+}
+
+/* Upload Section */
+.upload-card, .processing-card, .results-card {
+    background: var(--echo-surface);
+    border-radius: var(--echo-radius);
+    box-shadow: var(--echo-shadow);
+    padding: 48px;
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 32px;
+}
+
+.upload-icon {
+    color: var(--echo-primary);
+    margin-bottom: 24px;
+}
+
+.upload-card h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--echo-text-primary);
+}
+
+.upload-card p {
+    color: var(--echo-text-secondary);
+    font-size: 1.125rem;
+    margin-bottom: 32px;
+}
+
+/* Upload Area */
+.upload-area {
+    border: 2px dashed var(--echo-border);
+    border-radius: var(--echo-radius);
+    padding: 48px 24px;
+    background: var(--echo-background);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-area:hover {
+    border-color: var(--echo-primary);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.upload-area.drag-over {
+    border-color: var(--echo-primary);
+    background: rgba(37, 99, 235, 0.1);
+    transform: scale(1.02);
+}
+
+#pdfInput {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.upload-icon-small {
+    color: var(--echo-text-secondary);
+}
+
+.upload-text {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--echo-text-primary);
+}
+
+.upload-hint {
+    font-size: 0.875rem;
+    color: var(--echo-text-secondary);
+}
+
+/* Processing Section */
+.processing-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--echo-text-primary);
+}
+
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--echo-border);
+    border-top: 4px solid var(--echo-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 24px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--echo-border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 24px 0 12px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--echo-primary), var(--echo-primary-dark));
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+.progress-text {
+    font-weight: 600;
+    color: var(--echo-primary);
+}
+
+/* Results Section */
+.results-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--echo-success);
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+}
+
+.result-item {
+    background: var(--echo-background);
+    border-radius: var(--echo-radius);
+    padding: 16px;
+    text-align: center;
+    border: 1px solid var(--echo-border);
+    transition: all 0.3s ease;
+}
+
+.result-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--echo-shadow);
+}
+
+.result-preview {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: var(--echo-surface);
+    border: 1px solid var(--echo-border);
+}
+
+.result-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--echo-text-primary);
+    margin-bottom: 8px;
+}
+
+.result-size {
+    font-size: 0.75rem;
+    color: var(--echo-text-secondary);
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: var(--echo-radius);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: var(--echo-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--echo-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--echo-shadow);
+}
+
+.btn-secondary {
+    background: var(--echo-surface);
+    color: var(--echo-text-primary);
+    border: 1px solid var(--echo-border);
+}
+
+.btn-secondary:hover {
+    background: var(--echo-background);
+    transform: translateY(-2px);
+    box-shadow: var(--echo-shadow);
+}
+
+.download-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 24px;
+}
+
+.download-btn {
+    background: var(--echo-success);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+    background: #059669;
+    transform: translateY(-1px);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 32px 0;
+    color: var(--echo-text-secondary);
+    font-size: 0.875rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 16px;
+    }
+    
+    .upload-card, .processing-card, .results-card {
+        padding: 32px 24px;
+    }
+    
+    .echo-logo {
+        font-size: 2rem;
+    }
+    
+    .tagline {
+        font-size: 1rem;
+    }
+    
+    .upload-card h2 {
+        font-size: 1.5rem;
+    }
+    
+    .upload-area {
+        padding: 32px 16px;
+    }
+    
+    .download-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.slide-up {
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Error States */
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--echo-error);
+    padding: 16px;
+    border-radius: var(--echo-radius);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    text-align: center;
+    margin: 16px 0;
+    font-weight: 500;
+}
